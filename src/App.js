@@ -1,23 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { useState, useEffect } from "react";
+import { GetRandomUser } from "./api";
+import UserCard from "./components/UserCard";
+import "./App.css";
 function App() {
+
+  const [userData , setUserData] = useState(null);
+  const [refresh , setRefresh] = useState(0);
+
+
+    useEffect(()=>{
+      GetRandomUser().then((user)=> setUserData(user.results[0]));
+    },[refresh])
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {userData && <UserCard data={userData}/>}
+      <button className="Refresh-btn" onClick={()=>{setRefresh(refresh+1)}}>Refresh User</button>
     </div>
   );
 }
